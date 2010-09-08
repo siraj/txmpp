@@ -172,8 +172,10 @@ system = platform.system().lower()
 version = '0.0.2'
 
 src = [
+    'src/asyncfile.cc',
     'src/asynchttprequest.cc',
     'src/asyncpacketsocket.cc',
+    'src/asyncsocket.cc',
     'src/asynctcpsocket.cc',
     'src/asyncudpsocket.cc',
     'src/autodetectproxy.cc',
@@ -213,7 +215,9 @@ src = [
     'src/signalthread.cc',
     'src/socketadapters.cc',
     'src/socketaddress.cc',
+    'src/socketaddresspair.cc',
     'src/socketpool.cc',
+    'src/socketstream.cc',
     'src/ssladapter.cc',
     'src/sslidentity.cc',
     'src/sslsocketfactory.cc',

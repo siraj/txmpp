@@ -54,12 +54,15 @@ namespace txmpp {
 //   tasks in the context of the main thread.
 ///////////////////////////////////////////////////////////////////////////////
 
-class SignalThread : public txmpp::has_slots<>, protected MessageHandler {
+class SignalThread : public has_slots<>, protected MessageHandler {
  public:
   SignalThread();
 
+  // Context: Main Thread.  Call before Start to change the worker's name.
+  bool SetName(const std::string& name, const void* obj);
+
   // Context: Main Thread.  Call before Start to change the worker's priority.
-  void SetPriority(ThreadPriority priority);
+  bool SetPriority(ThreadPriority priority);
 
   // Context: Main Thread.  Call to begin the worker thread.
   void Start();
@@ -77,7 +80,7 @@ class SignalThread : public txmpp::has_slots<>, protected MessageHandler {
   void Release();
 
   // Context: Main Thread.  Signalled when work is complete.
-  txmpp::signal1<SignalThread *> SignalWorkDone;
+  signal1<SignalThread *> SignalWorkDone;
 
   enum { ST_MSG_WORKER_DONE, ST_MSG_FIRST_AVAILABLE };
 

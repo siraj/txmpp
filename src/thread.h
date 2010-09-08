@@ -34,6 +34,7 @@
 
 #include <algorithm>
 #include <list>
+#include <string>
 #include <vector>
 
 #ifdef POSIX
@@ -123,23 +124,29 @@ public:
     return ThreadManager::CurrentThread();
   }
 
+  bool IsCurrent() const {
+    return (ThreadManager::CurrentThread() == this);
+  }
+
   // Sleeps the calling thread for the specified number of milliseconds, during
   // which time no processing is performed. Returns false if sleeping was
   // interrupted by a signal (POSIX only).
   static bool SleepMs(int millis);
 
-  inline bool IsCurrent() const {
-    return (ThreadManager::CurrentThread() == this);
-  }
+  // Sets the thread's name, for debugging. Must be called before Start().
+  // If |obj| is non-NULL, its value is appended to |name|.
+  const std::string& name() const { return name_; }
+  bool SetName(const std::string& name, const void* obj);
 
-  void SetPriority(ThreadPriority priority) {
-    priority_ = priority;
-  }
+  // Sets the thread's priority. Must be called before Start().
+  ThreadPriority priority() const { return priority_; }
+  bool SetPriority(ThreadPriority priority);
 
+  // Starts the execution of the thread.
   bool started() const { return started_; }
-
   bool Start(Runnable* runnable = NULL);
 
+  // Tells the thread to stop and waits until it is joined.
   // Never call Stop on the current thread.  Instead use the inherited Quit
   // function which will exit the base MessageQueue without terminating the
   // underlying OS thread.
@@ -187,6 +194,7 @@ private:
   void Join();
 
   std::list<_SendMessage> sendlist_;
+  std::string name_;
   ThreadPriority priority_;
   bool started_;
   bool has_sends_;

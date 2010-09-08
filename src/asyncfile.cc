@@ -1,6 +1,6 @@
 /*
  * libjingle
- * Copyright 2005--2010, Google Inc.
+ * Copyright 2010, Google Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,54 +25,14 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _TXMPP_SOCKET_STREAM_H_
-#define _TXMPP_SOCKET_STREAM_H_
-
-#ifndef NO_CONFIG_H
-#include "config.h"
-#endif
-
-#include "asyncsocket.h"
-#include "common.h"
-#include "stream.h"
+#include "asyncfile.h"
 
 namespace txmpp {
 
-///////////////////////////////////////////////////////////////////////////////
+AsyncFile::AsyncFile() {
+}
 
-class SocketStream : public StreamInterface, public has_slots<> {
- public:
-  explicit SocketStream(AsyncSocket* socket);
-  virtual ~SocketStream();
-
-  void Attach(AsyncSocket* socket);
-  AsyncSocket* Detach();
-
-  AsyncSocket* GetSocket() { return socket_; }
-
-  virtual StreamState GetState() const;
-
-  virtual StreamResult Read(void* buffer, size_t buffer_len,
-                            size_t* read, int* error);
-
-  virtual StreamResult Write(const void* data, size_t data_len,
-                             size_t* written, int* error);
-
-  virtual void Close();
-
- private:
-  void OnConnectEvent(AsyncSocket* socket);
-  void OnReadEvent(AsyncSocket* socket);
-  void OnWriteEvent(AsyncSocket* socket);
-  void OnCloseEvent(AsyncSocket* socket, int err);
-
-  AsyncSocket* socket_;
-
-  DISALLOW_EVIL_CONSTRUCTORS(SocketStream);
-};
-
-///////////////////////////////////////////////////////////////////////////////
+AsyncFile::~AsyncFile() {
+}
 
 }  // namespace txmpp
-
-#endif  // _TXMPP_SOCKET_STREAM_H_

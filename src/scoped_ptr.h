@@ -30,8 +30,9 @@
 #endif
 
 #include <cstddef>            // for std::ptrdiff_t
-#include <assert.h>           // for assert
 #include <stdlib.h>           // for free() decl
+
+#include "common.h"  // for ASSERT
 
 #ifdef _WIN32
 namespace std { using ::ptrdiff_t; };
@@ -71,12 +72,12 @@ class scoped_ptr {
   }
 
   T& operator*() const {
-    assert(ptr != NULL);
+    ASSERT(ptr != NULL);
     return *ptr;
   }
 
   T* operator->() const  {
-    assert(ptr != NULL);
+    ASSERT(ptr != NULL);
     return ptr;
   }
 
@@ -153,8 +154,8 @@ class scoped_array {
   }
 
   T& operator[](std::ptrdiff_t i) const {
-    assert(ptr != NULL);
-    assert(i >= 0);
+    ASSERT(ptr != NULL);
+    ASSERT(i >= 0);
     return ptr[i];
   }
 
@@ -217,12 +218,12 @@ template<typename T, void (*FF)(void*) = free> class scoped_ptr_malloc {
   }
 
   T& operator*() const {
-    assert(ptr != 0);
+    ASSERT(ptr != 0);
     return *ptr;
   }
 
   T* operator->() const {
-    assert(ptr != 0);
+    ASSERT(ptr != 0);
     return ptr;
   }
 

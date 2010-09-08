@@ -216,7 +216,7 @@ bool SocketAddress::ResolveIP(bool force, int* error) {
                         << IPToString(ip_);
       FreeHostEnt(pHost);
     } else {
-      LOG_F(LS_ERROR) << "(" << hostname_ << ") error: " << errcode;
+      LOG_F(LS_ERROR) << "(" << hostname_ << ") err: " << errcode;
     }
     if (error) {
       *error = errcode;
@@ -352,7 +352,7 @@ bool SocketAddress::GetLocalIPs(std::vector<uint32>& ips) {
     FreeHostEnt(pHost);
     return !ips.empty();
   }
-  LOG(LS_ERROR) << "gethostbyname error: " << errcode;
+  LOG(LS_ERROR) << "gethostbyname err: " << errcode;
   return false;
 }
 

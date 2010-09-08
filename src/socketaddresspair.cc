@@ -1,6 +1,6 @@
 /*
  * libjingle
- * Copyright 2005--2010, Google Inc.
+ * Copyright 2004--2005, Google Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,54 +25,34 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _TXMPP_SOCKET_STREAM_H_
-#define _TXMPP_SOCKET_STREAM_H_
-
-#ifndef NO_CONFIG_H
-#include "config.h"
-#endif
-
-#include "asyncsocket.h"
-#include "common.h"
-#include "stream.h"
+#include "socketaddresspair.h"
 
 namespace txmpp {
 
-///////////////////////////////////////////////////////////////////////////////
+SocketAddressPair::SocketAddressPair(
+    const SocketAddress& src, const SocketAddress& dest)
+    : src_(src), dest_(dest) {
+}
 
-class SocketStream : public StreamInterface, public has_slots<> {
- public:
-  explicit SocketStream(AsyncSocket* socket);
-  virtual ~SocketStream();
 
-  void Attach(AsyncSocket* socket);
-  AsyncSocket* Detach();
+bool SocketAddressPair::operator ==(const SocketAddressPair& p) const {
+  return (src_ == p.src_) && (dest_ == p.dest_);
+}
 
-  AsyncSocket* GetSocket() { return socket_; }
+bool SocketAddressPair::operator <(const SocketAddressPair& p) const {
+  if (src_ < p.src_)
+    return true;
+  if (p.src_ < src_)
+    return false;
+  if (dest_ < p.dest_)
+    return true;
+  if (p.dest_ < dest_)
+    return false;
+  return false;
+}
 
-  virtual StreamState GetState() const;
+size_t SocketAddressPair::Hash() const {
+  return src_.Hash() ^ dest_.Hash();
+}
 
-  virtual StreamResult Read(void* buffer, size_t buffer_len,
-                            size_t* read, int* error);
-
-  virtual StreamResult Write(const void* data, size_t data_len,
-                             size_t* written, int* error);
-
-  virtual void Close();
-
- private:
-  void OnConnectEvent(AsyncSocket* socket);
-  void OnReadEvent(AsyncSocket* socket);
-  void OnWriteEvent(AsyncSocket* socket);
-  void OnCloseEvent(AsyncSocket* socket, int err);
-
-  AsyncSocket* socket_;
-
-  DISALLOW_EVIL_CONSTRUCTORS(SocketStream);
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-}  // namespace txmpp
-
-#endif  // _TXMPP_SOCKET_STREAM_H_
+} // namespace txmpp
