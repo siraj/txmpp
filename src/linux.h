@@ -95,6 +95,11 @@ std::string ReadLinuxLsbRelease();
 // Returns the output of "uname".
 std::string ReadLinuxUname();
 
+// Returns the content (int) of
+// /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq
+// Returns -1 on error.
+int ReadCpuMaxFreq();
+
 }  // namespace txmpp
 
 #endif  // LINUX
