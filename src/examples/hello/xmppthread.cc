@@ -27,6 +27,7 @@
 
 #include "xmppthread.h"
 
+#include <assert.h>
 #include "../../prexmppauthimpl.h"
 #include "../../xmppasyncsocketimpl.h"
 #include "../../xmppclientsettings.h"
