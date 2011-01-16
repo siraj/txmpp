@@ -20,5 +20,7 @@ devel:
 
 clean:
 	$(SCONS) -c || :
+	rm -fr .scon*
 	rm -f config.*
+	rm -f src/config.h
 	find . -name \*.o -type f -delete
