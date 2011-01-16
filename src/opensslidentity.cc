@@ -271,4 +271,4 @@ bool OpenSSLIdentity::ConfigureIdentity(SSL_CTX* ctx) {
   return true;
 }
 
-}  // talk_base namespace
+}  // txmpp namespace

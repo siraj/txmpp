@@ -42,9 +42,33 @@
 typedef int SOCKET;
 #endif // POSIX
 
-namespace txmpp { 
+namespace txmpp {
 
-class Dispatcher;
+// Event constants for the Dispatcher class.
+enum DispatcherEvent {
+  DE_READ    = 0x0001,
+  DE_WRITE   = 0x0002,
+  DE_CONNECT = 0x0004,
+  DE_CLOSE   = 0x0008,
+  DE_ACCEPT  = 0x0010,
+};
+
+class Dispatcher {
+ public:
+  virtual ~Dispatcher() {}
+  virtual uint32 GetRequestedEvents() = 0;
+  virtual void OnPreEvent(uint32 ff) = 0;
+  virtual void OnEvent(uint32 ff, int err) = 0;
+#ifdef WIN32
+  virtual WSAEVENT GetWSAEvent() = 0;
+  virtual SOCKET GetSocket() = 0;
+  virtual bool CheckSignalClose() = 0;
+#elif POSIX
+  virtual int GetDescriptor() = 0;
+  virtual bool IsDescriptorClosed() = 0;
+#endif
+};
+
 class Signaler;
 #ifdef POSIX
 class PosixSignalDeliveryDispatcher;
