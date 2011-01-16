@@ -5,7 +5,7 @@ OPTFLAGS?=
 PREFIX?=/usr/local
 
 $(BUILD):
-	echo -n "$(SCONS) --flags=\"$(OPTFLAGS)\" --prefix=\"$(PREFIX)\"" > $(BUILD)
+	echo -n "$(SCONS) --flags=\"$(OPTFLAGS)\" --prefix=\"$(PREFIX)\" --with-examples" > $(BUILD)
 	sh $(BUILD)
 
 build: $(BUILD)
@@ -20,7 +20,8 @@ devel:
 
 clean:
 	$(SCONS) -c || :
-	rm -fr .scon*
 	rm -f config.*
+	rm -f hello-example
 	rm -f src/config.h
+	rm -fr .scon*
 	find . -name \*.o -type f -delete

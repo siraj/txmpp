@@ -10,9 +10,10 @@ of [permissively licenced alternatives][permissive].
 If you don't mind a library with a [copyleft][copyleft] license you might also
 try [gloox][gloox].
 
-### Build
+### Build and Install
 
-    scons --with-examples
+    make
+    make install
 
 ### Getting Started
 
