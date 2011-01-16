@@ -169,7 +169,7 @@ link = ''
 name = 'txmpp'
 prefix = GetOption('prefix')
 system = platform.system().lower()
-version = '0.0.2'
+version = '0.5.2'
 
 src = [
     'src/asyncfile.cc',

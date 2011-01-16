@@ -19,6 +19,6 @@ devel:
 	$(SCONS) --flags="$(OPTFLAGS)" --with-devel
 
 clean:
-	$(SCONS) -c
+	$(SCONS) -c || :
 	rm -f config.*
 	find . -name \*.o -type f -delete
