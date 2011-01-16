@@ -10,6 +10,12 @@ of [permissively licenced alternatives][permissive].
 If you don't mind a library with a [copyleft][copyleft] license you might also
 try [gloox][gloox].
 
+### Requirements
+
+ * [Expat][expat] >= 2.0.1
+ * [OpenSSL][openssl]
+ * [SCons][scons] (build)
+
 ### Build and Install
 
     make
@@ -29,3 +35,6 @@ This work is licensed under the New BSD License (see the LICENSE file).
 [permissive]: http://en.wikipedia.org/wiki/Permissive_license
 [copyleft]: http://en.wikipedia.org/wiki/Copyleft
 [gloox]: http://camaya.net/gloox/
+[expat]: http://expat.sourceforge.net/
+[openssl]: http://www.openssl.org/
+[scons]: http://www.scons.org/
