@@ -25,50 +25,68 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TXMPP_ASYNCTCPSOCKET_H_
-#define TXMPP_ASYNCTCPSOCKET_H_
+#include "worker.h"
 
-#ifndef NO_CONFIG_H
-#include "config.h"
-#endif
-
-#include "asyncpacketsocket.h"
-#include "socketfactory.h"
+#include "common.h"
+#include "logging.h"
+#include "thread.h"
 
 namespace txmpp {
 
-// Simulates UDP semantics over TCP.  Send and Recv packet sizes
-// are preserved, and drops packets silently on Send, rather than
-// buffer them in user space.
-class AsyncTCPSocket : public AsyncPacketSocket {
- public:
-  static AsyncTCPSocket* Create(SocketFactory* factory, bool listen);
-  explicit AsyncTCPSocket(AsyncSocket* socket, bool listen);
-  virtual ~AsyncTCPSocket();
-
-  virtual int Send(const void* pv, size_t cb);
-  virtual int SendTo(const void* pv, size_t cb, const SocketAddress& addr);
-
- protected:
-  int SendRaw(const void* pv, size_t cb);
-  virtual void ProcessInput(char* data, size_t& len);
-
- private:
-  int Flush();
-
-  // Called by the underlying socket
-  void OnConnectEvent(AsyncSocket* socket);
-  void OnReadEvent(AsyncSocket* socket);
-  void OnWriteEvent(AsyncSocket* socket);
-  void OnCloseEvent(AsyncSocket* socket, int error);
-
-  bool listen_;
-  char* inbuf_, * outbuf_;
-  size_t insize_, inpos_, outsize_, outpos_;
-
-  DISALLOW_EVIL_CONSTRUCTORS(AsyncTCPSocket);
+enum {
+  MSG_HAVEWORK = 0,
 };
 
-}  // namespace txmpp
+Worker::Worker() : worker_thread_(NULL) {}
 
-#endif  // TXMPP_ASYNCTCPSOCKET_H_
+Worker::~Worker() {
+  // We need to already be stopped before being destroyed. We cannot call
+  // StopWork() from here because the subclass's data has already been
+  // destructed, so OnStop() cannot be called.
+  ASSERT(!worker_thread_);
+}
+
+bool Worker::StartWork() {
+  txmpp::Thread *me = txmpp::Thread::Current();
+  if (worker_thread_) {
+    if (worker_thread_ == me) {
+      // Already working on this thread, so nothing to do.
+      return true;
+    } else {
+      LOG(LS_ERROR) << "Automatically switching threads is not supported";
+      ASSERT(false);
+      return false;
+    }
+  }
+  worker_thread_ = me;
+  OnStart();
+  return true;
+}
+
+bool Worker::StopWork() {
+  if (!worker_thread_) {
+    // Already not working, so nothing to do.
+    return true;
+  } else if (worker_thread_ != txmpp::Thread::Current()) {
+    LOG(LS_ERROR) << "Stopping from a different thread is not supported";
+    ASSERT(false);
+    return false;
+  }
+  OnStop();
+  worker_thread_->Clear(this, MSG_HAVEWORK);
+  worker_thread_ = NULL;
+  return true;
+}
+
+void Worker::HaveWork() {
+  ASSERT(worker_thread_ != NULL);
+  worker_thread_->Post(this, MSG_HAVEWORK);
+}
+
+void Worker::OnMessage(txmpp::Message *msg) {
+  ASSERT(msg->message_id == MSG_HAVEWORK);
+  ASSERT(worker_thread_ == txmpp::Thread::Current());
+  OnHaveWork();
+}
+
+}  // namespace txmpp

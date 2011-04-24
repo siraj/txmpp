@@ -1,6 +1,6 @@
 /*
  * libjingle
- * Copyright 2004--2005, Google Inc.
+ * Copyright 2011, Google Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,13 +25,40 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _TXMPP_BASICDEFS_H_
-#define _TXMPP_BASICDEFS_H_
+#ifndef _TXMPP_PACKETSOCKETFACTORY_H_
+#define _TXMPP_PACKETSOCKETFACTORY_H_
 
 #ifndef NO_CONFIG_H
 #include "config.h"
 #endif
 
-#define ARRAY_SIZE(x) (static_cast<int>((sizeof(x)/sizeof(x[0]))))
+#include "proxyinfo.h"
 
-#endif  // _TXMPP_BASICDEFS_H_
+namespace txmpp {
+
+class AsyncPacketSocket;
+
+class PacketSocketFactory {
+ public:
+  PacketSocketFactory() { }
+  virtual ~PacketSocketFactory() { }
+
+  virtual AsyncPacketSocket* CreateUdpSocket(
+      const SocketAddress& address, int min_port, int max_port) = 0;
+  virtual AsyncPacketSocket* CreateServerTcpSocket(
+      const SocketAddress& local_address, int min_port, int max_port,
+      bool ssl) = 0;
+
+  // TODO: |proxy_info| and |user_agent| should be set
+  // per-factory and not when socket is created.
+  virtual AsyncPacketSocket* CreateClientTcpSocket(
+      const SocketAddress& local_address, const SocketAddress& remote_address,
+      const ProxyInfo& proxy_info, const std::string& user_agent, bool ssl) = 0;
+
+ private:
+  DISALLOW_EVIL_CONSTRUCTORS(PacketSocketFactory);
+};
+
+}  // namespace txmpp
+
+#endif  // _TXMPP_PACKETSOCKETFACTORY_H_

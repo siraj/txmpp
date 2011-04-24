@@ -40,7 +40,7 @@ namespace txmpp {
 // Win32Socket
 ///////////////////////////////////////////////////////////////////////////////
 
-// TODO(juberti): Move this to a common place where PhysicalSocketServer can
+// TODO: Move this to a common place where PhysicalSocketServer can
 // share it.
 // Standard MTUs
 static const uint16 PACKET_MAXIMUMS[] = {
@@ -68,7 +68,7 @@ static const uint16 PACKET_MAXIMUMS[] = {
 static const uint32 IP_HEADER_SIZE = 20;
 static const uint32 ICMP_HEADER_SIZE = 8;
 
-// TODO(juberti): Enable for production builds also? Use FormatMessage?
+// TODO: Enable for production builds also? Use FormatMessage?
 #ifdef _DEBUG
 LPCSTR WSAErrorToString(int error, LPCSTR *description_result) {
   LPCSTR string = "Unspecified";
@@ -692,8 +692,11 @@ void Win32Socket::OnDnsNotify(HANDLE task, int error) {
 static UINT s_wm_wakeup_id = 0;
 const TCHAR Win32SocketServer::kWindowName[] = L"libjingle Message Window";
 
-Win32SocketServer::Win32SocketServer(MessageQueue *message_queue)
-    : message_queue_(message_queue), wnd_(this), posted_(false) {
+Win32SocketServer::Win32SocketServer(MessageQueue* message_queue)
+    : message_queue_(message_queue),
+      wnd_(this),
+      posted_(false),
+      hdlg_(NULL) {
   if (s_wm_wakeup_id == 0)
     s_wm_wakeup_id = RegisterWindowMessage(L"WM_WAKEUP");
   if (!wnd_.Create(NULL, kWindowName, 0, 0, 0, 0, 0, 0)) {
@@ -731,13 +734,19 @@ bool Win32SocketServer::Wait(int cms, bool process_io) {
     // Spin the Win32 message pump at least once, and as long as requested.
     // This is the Thread::ProcessMessages case.
     uint32 start = Time();
-    MSG msg;
     do {
+      MSG msg;
       SetTimer(wnd_.handle(), 0, cms, NULL);
+      // Get the next available message. If we have a modeless dialog, give
+      // give the message to IsDialogMessage, which will return true if it
+      // was a message for the dialog that it handled internally.
+      // Otherwise, dispatch as usual via Translate/DispatchMessage.
       b = GetMessage(&msg, NULL, 0, 0);
       if (b) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        if (!hdlg_ || !IsDialogMessage(hdlg_, &msg)) {
+          TranslateMessage(&msg);
+          DispatchMessage(&msg);
+        }
       }
       KillTimer(wnd_.handle(), 0);
     } while (b && TimeSince(start) < cms);

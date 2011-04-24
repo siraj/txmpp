@@ -25,8 +25,8 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TXMPP_ASYNCFILE_H_
-#define TXMPP_ASYNCFILE_H_
+#ifndef _TXMPP_ASYNCFILE_H_
+#define _TXMPP_ASYNCFILE_H_
 
 #ifndef NO_CONFIG_H
 #include "config.h"
@@ -58,4 +58,4 @@ class AsyncFile {
 
 }  // namespace txmpp
 
-#endif  // TXMPP_ASYNCFILE_H_
+#endif  // _TXMPP_ASYNCFILE_H_

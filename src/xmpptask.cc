@@ -138,6 +138,12 @@ bool XmppTask::MatchResponseIq(const XmlElement* stanza,
   if (stanza->Attr(QN_ID) != id)
     return false;
 
+  return MatchStanzaFrom(stanza, to);
+}
+
+
+bool XmppTask::MatchStanzaFrom(const XmlElement* stanza,
+                               const Jid& to) {
   Jid from(stanza->Attr(QN_FROM));
   if (from == to)
     return true;

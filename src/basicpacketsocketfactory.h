@@ -1,6 +1,6 @@
 /*
  * libjingle
- * Copyright 2004--2005, Google Inc.
+ * Copyright 2011, Google Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,13 +25,46 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _TXMPP_BASICDEFS_H_
-#define _TXMPP_BASICDEFS_H_
+#ifndef _TXMPP_BASICPACKETSOCKETFACTORY_H_
+#define _TXMPP_BASICPACKETSOCKETFACTORY_H_
 
 #ifndef NO_CONFIG_H
 #include "config.h"
 #endif
 
-#define ARRAY_SIZE(x) (static_cast<int>((sizeof(x)/sizeof(x[0]))))
+#include "packetsocketfactory.h"
 
-#endif  // _TXMPP_BASICDEFS_H_
+namespace txmpp {
+
+class AsyncSocket;
+class SocketFactory;
+class Thread;
+
+class BasicPacketSocketFactory : public PacketSocketFactory {
+ public:
+  BasicPacketSocketFactory();
+  explicit BasicPacketSocketFactory(Thread* thread);
+  explicit BasicPacketSocketFactory(SocketFactory* socket_factory);
+  virtual ~BasicPacketSocketFactory();
+
+  virtual AsyncPacketSocket* CreateUdpSocket(
+      const SocketAddress& local_address, int min_port, int max_port);
+  virtual AsyncPacketSocket* CreateServerTcpSocket(
+      const SocketAddress& local_address, int min_port, int max_port, bool ssl);
+  virtual AsyncPacketSocket* CreateClientTcpSocket(
+      const SocketAddress& local_address, const SocketAddress& remote_address,
+      const ProxyInfo& proxy_info, const std::string& user_agent, bool ssl);
+
+ private:
+  int BindSocket(AsyncSocket* socket, const SocketAddress& local_address,
+                 int min_port, int max_port);
+
+  SocketFactory* socket_factory();
+
+  Thread* thread_;
+  SocketFactory* socket_factory_;
+};
+
+}  // namespace txmpp
+
+#endif  // _TXMPP_BASICPACKETSOCKETFACTORY_H_

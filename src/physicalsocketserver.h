@@ -37,6 +37,7 @@
 #include "asyncfile.h"
 #include "socketserver.h"
 #include "criticalsection.h"
+#include "scoped_ptr.h"
 
 #ifdef POSIX
 typedef int SOCKET;
@@ -53,6 +54,11 @@ enum DispatcherEvent {
   DE_ACCEPT  = 0x0010,
 };
 
+class Signaler;
+#ifdef POSIX
+class PosixSignalDispatcher;
+#endif
+
 class Dispatcher {
  public:
   virtual ~Dispatcher() {}
@@ -68,11 +74,6 @@ class Dispatcher {
   virtual bool IsDescriptorClosed() = 0;
 #endif
 };
-
-class Signaler;
-#ifdef POSIX
-class PosixSignalDeliveryDispatcher;
-#endif
 
 // A socket server that provides the real sockets of the underlying OS.
 class PhysicalSocketServer : public SocketServer {
@@ -103,9 +104,8 @@ public:
   // manipulate user-level data structures.
   // "handler" may be SIG_IGN, SIG_DFL, or a user-specified function, just like
   // with signal(2).
-  // Only one PhysicalSocketServer may have user-level signal handlers.
-  // Attempting to install a signal handler for a PhysicalSocketServer when
-  // another already owns some will fail.
+  // Only one PhysicalSocketServer should have user-level signal handlers.
+  // Dispatching signals on multiple PhysicalSocketServers is not reliable.
   // The signal mask is not modified. It is the caller's responsibily to
   // maintain it as desired.
   bool SetPosixSignalHandler(int signum, void (*handler)(int));
@@ -117,8 +117,9 @@ private:
 
 #ifdef POSIX
   static bool InstallSignal(int signum, void (*handler)(int));
-#endif
 
+  scoped_ptr<PosixSignalDispatcher> signal_dispatcher_;
+#endif
   DispatcherList dispatchers_;
   IteratorList iterators_;
   Signaler* signal_wakeup_;

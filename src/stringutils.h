@@ -35,13 +35,19 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
+
 #ifdef WIN32
 #include <malloc.h>
 #include <wchar.h>
 #define alloca _alloca
 #endif  // WIN32
+
 #ifdef POSIX
+#ifdef BSD
+#include <stdlib.h>
+#else  // BSD
 #include <alloca.h>
+#endif  // !BSD
 #endif  // POSIX
 
 #include <cstring>
@@ -329,6 +335,9 @@ void replace_substrs(const char *search,
 
 // True iff s1 starts with s2.
 bool starts_with(const char *s1, const char *s2);
+
+// Remove leading and trailing whitespaces.
+std::string string_trim(const std::string& s);
 
 }  // namespace txmpp
 

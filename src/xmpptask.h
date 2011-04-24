@@ -102,6 +102,8 @@ class XmppTask :
   virtual void QueueStanza(const XmlElement* stanza);
   const XmlElement* NextStanza();
 
+  bool MatchStanzaFrom(const XmlElement* stanza, const Jid& match_jid);
+
   bool MatchResponseIq(const XmlElement* stanza, const Jid& to,
                        const std::string& task_id);
 

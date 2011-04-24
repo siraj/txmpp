@@ -32,6 +32,8 @@
 #include "config.h"
 #endif
 
+// TODO: Remove dependency on AsyncSocket. AsyncPacketSocket
+// should be a pure interface.
 #include "asyncsocket.h"
 
 namespace txmpp {
@@ -43,11 +45,13 @@ class AsyncPacketSocket : public txmpp::has_slots<> {
   explicit AsyncPacketSocket(AsyncSocket* socket);
   virtual ~AsyncPacketSocket();
 
+  // TODO: Remove these two methods.
+  virtual int Bind(const SocketAddress& addr);
+  virtual int Connect(const SocketAddress& addr);
+
   // Relevant socket methods:
   virtual SocketAddress GetLocalAddress() const;
   virtual SocketAddress GetRemoteAddress() const;
-  virtual int Bind(const SocketAddress& addr);
-  virtual int Connect(const SocketAddress& addr);
   virtual int Send(const void *pv, size_t cb);
   virtual int SendTo(const void *pv, size_t cb, const SocketAddress& addr);
   virtual int Close();
@@ -58,9 +62,17 @@ class AsyncPacketSocket : public txmpp::has_slots<> {
   virtual int GetError() const;
   virtual void SetError(int error);
 
-  // Emitted each time a packet is read.
-  txmpp::signal4<const char*, size_t,
-                   const SocketAddress&, AsyncPacketSocket*> SignalReadPacket;
+  // Emitted each time a packet is read. Used only for UDP and
+  // connected TCP sockets.
+  signal4<AsyncPacketSocket*, const char*, size_t,
+                   const SocketAddress&> SignalReadPacket;
+
+  // Used only for connected TCP sockets.
+  signal1<AsyncPacketSocket*> SignalConnect;
+  signal2<AsyncPacketSocket*, int> SignalClose;
+
+  // Used only for listening TCP sockets.
+  signal2<AsyncPacketSocket*, AsyncPacketSocket*> SignalNewConnection;
 
  protected:
   AsyncSocket* socket_;
