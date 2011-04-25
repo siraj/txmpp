@@ -4,13 +4,15 @@ SCONS?=scons
 OPTFLAGS?=
 PREFIX?=/usr/local
 
-$(BUILD):
-	echo -n "$(SCONS) --flags=\"$(OPTFLAGS)\" --prefix=\"$(PREFIX)\" --with-examples" > $(BUILD)
+.PHONY: build install devel clean
+
+build:
+	test -f $(BUILD) || \
+		echo -n "$(SCONS) --flags=\"$(OPTFLAGS)\" --prefix=\"$(PREFIX)\" --with-examples" \
+		> $(BUILD)
 	sh $(BUILD)
 
-build: $(BUILD)
-
-install: $(BUILD)
+install: build
 	cp -f $(BUILD) $(INSTALL)
 	echo -n " --install" >> $(INSTALL)
 	sh $(INSTALL)
