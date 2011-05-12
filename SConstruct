@@ -196,7 +196,6 @@ src = [
     'src/httpcommon.cc',
     'src/httprequest.cc',
     'src/jid.cc',
-    'src/latebindingsymboltable.cc',
     'src/logging.cc',
     'src/md5c.c',
     'src/messagehandler.cc',
@@ -204,8 +203,6 @@ src = [
     'src/nethelpers.cc',
     'src/network.cc',
     'src/openssladapter.cc',
-    'src/opensslidentity.cc',
-    'src/opensslstreamadapter.cc',
     'src/pathutils.cc',
     'src/physicalsocketserver.cc',
     'src/prexmppauthimpl.cc',
@@ -222,9 +219,7 @@ src = [
     'src/socketpool.cc',
     'src/socketstream.cc',
     'src/ssladapter.cc',
-    'src/sslidentity.cc',
     'src/sslsocketfactory.cc',
-    'src/sslstreamadapter.cc',
     'src/stream.cc',
     'src/stringdigest.cc',
     'src/stringencode.cc',
@@ -256,7 +251,16 @@ darwin_src = [
     'src/macutils.cc',
 ]
 
+linux_src = [
+    'src/latebindingsymboltable.cc',
+    'src/linux.cc',
+]
+
 posix_src = [
+    'src/opensslidentity.cc',
+    'src/opensslstreamadapter.cc',
+    'src/sslidentity.cc',
+    'src/sslstreamadapter.cc',
     'src/unixfilesystem.cc',
 ]
 
@@ -275,7 +279,7 @@ if system == 'linux':
     defines += ['LINUX']
     soname = 'lib%s.so.%s' % (name, version)
     link += ' -Wl,-soname,%s' % soname
-    src += posix_src
+    src += posix_src + linux_src
 elif system == 'darwin':
     defines += ['OSX']
     soname = 'lib%s.dylib.%s' % (name, version)
