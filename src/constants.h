@@ -36,8 +36,6 @@
 #include "qname.h"
 #include "jid.h"
 
-namespace txmpp {
-
 #define NS_CLIENT Constants::ns_client()
 #define NS_SERVER Constants::ns_server()
 #define NS_STREAM Constants::ns_stream()
@@ -56,6 +54,9 @@ namespace txmpp {
 #define STR_CLIENT Constants::str_client()
 #define STR_SERVER Constants::str_server()
 #define STR_STREAM Constants::str_stream()
+
+
+namespace txmpp {
 
 extern const Jid JID_EMPTY;
 
@@ -93,14 +94,6 @@ extern const std::string STR_TO;
 extern const std::string STR_BOTH;
 extern const std::string STR_REMOVE;
 
-extern const std::string STR_MESSAGE;
-extern const std::string STR_BODY;
-extern const std::string STR_PRESENCE;
-extern const std::string STR_STATUS;
-extern const std::string STR_SHOW;
-extern const std::string STR_PRIOIRTY;
-extern const std::string STR_IQ;
-
 extern const std::string STR_TYPE;
 extern const std::string STR_NAME;
 extern const std::string STR_ID;
@@ -121,6 +114,7 @@ extern const std::string STR_OUTGOINGVOICEMAIL;
 #endif
 
 extern const std::string STR_UNAVAILABLE;
+
 
 extern const QName QN_STREAM_STREAM;
 extern const QName QN_STREAM_FEATURES;
@@ -359,6 +353,10 @@ extern const QName QN_MUC_AFFILIATION;
 extern const QName QN_MUC_ROLE;
 extern const std::string STR_AFFILIATION_NONE;
 extern const std::string STR_ROLE_PARTICIPANT;
+
+extern const std::string NS_MUC_OWNER;
+extern const QName QN_MUC_OWNER_QUERY;
+
 extern const std::string NS_MUC_USER;
 extern const QName QN_MUC_USER_CONTINUE;
 extern const QName QN_MUC_USER_X;
@@ -446,20 +444,7 @@ extern const QName QN_GOOGLE_MUC_USER_MEDIA;
 extern const QName QN_GOOGLE_MUC_USER_TYPE;
 extern const QName QN_GOOGLE_MUC_USER_SRC_ID;
 extern const QName QN_GOOGLE_MUC_USER_STATUS;
-extern const std::string NS_JINGLE;
-extern const QName QN_JINGLE_SRC_ID;
 extern const QName QN_LABEL;
-
-// Call terminate reasons
-extern const std::string STR_TERMINATE_CALL_ENDED;
-extern const std::string STR_TERMINATE_RECIPIENT_UNAVAILABLE;
-extern const std::string STR_TERMINATE_RECIPIENT_BUSY;
-extern const std::string STR_TERMINATE_INSUFFICIENT_FUNDS;
-extern const std::string STR_TERMINATE_NUMBER_MALFORMED;
-extern const std::string STR_TERMINATE_NUMBER_DISALLOWED;
-extern const std::string STR_TERMINATE_PROTOCOL_ERROR;
-extern const std::string STR_TERMINATE_INTERNAL_SERVER_ERROR;
-extern const std::string STR_TERMINATE_UNKNOWN_ERROR;
 
 }  // namespace txmpp
 

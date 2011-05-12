@@ -29,10 +29,10 @@
 
 #include <string>
 #include "basicdefs.h"
-#include "jid.h"
-#include "qname.h"
 #include "xmlconstants.h"
 #include "xmlelement.h"
+#include "qname.h"
+#include "jid.h"
 
 namespace txmpp {
 
@@ -139,8 +139,13 @@ const std::string STR_TO("to");
 const std::string STR_BOTH("both");
 const std::string STR_REMOVE("remove");
 
-const std::string STR_UNAVAILABLE("unavailable");
-
+const std::string STR_TYPE("type");
+const std::string STR_NAME("name");
+const std::string STR_ID("id");
+const std::string STR_JID("jid");
+const std::string STR_SUBSCRIPTION("subscription");
+const std::string STR_ASK("ask");
+const std::string STR_X("x");
 const std::string STR_GOOGLE_COM("google.com");
 const std::string STR_GMAIL_COM("gmail.com");
 const std::string STR_GOOGLEMAIL_COM("googlemail.com");
@@ -148,12 +153,13 @@ const std::string STR_DEFAULT_DOMAIN("default.talk.google.com");
 const std::string STR_TALK_GOOGLE_COM("talk.google.com");
 const std::string STR_TALKX_L_GOOGLE_COM("talkx.l.google.com");
 
-const std::string STR_X("x");
-
 #ifdef FEATURE_ENABLE_VOICEMAIL
 const std::string STR_VOICEMAIL("voicemail");
 const std::string STR_OUTGOINGVOICEMAIL("outgoingvoicemail");
 #endif
+
+const std::string STR_UNAVAILABLE("unavailable");
+
 
 const QName QN_STREAM_STREAM(true, NS_STREAM, STR_STREAM);
 const QName QN_STREAM_FEATURES(true, NS_STREAM, "features");
@@ -283,9 +289,9 @@ const QName QN_VCARD_PHOTO_BINVAL(true, NS_VCARD, "BINVAL");
 const QName QN_VCARD_AVATAR_HASH(true, NS_AVATAR_HASH, "hash");
 const QName QN_VCARD_AVATAR_HASH_MODIFIED(true, NS_AVATAR_HASH, "modified");
 
-const txmpp::QName QN_NAME(true, STR_EMPTY, "name");
-const txmpp::QName QN_AFFILIATION(true, STR_EMPTY, "affiliation");
-const txmpp::QName QN_ROLE(true, STR_EMPTY, "role");
+const QName QN_NAME(true, STR_EMPTY, "name");
+const QName QN_AFFILIATION(true, STR_EMPTY, "affiliation");
+const QName QN_ROLE(true, STR_EMPTY, "role");
 
 #if defined(FEATURE_ENABLE_PSTN)
 const QName QN_VCARD_TEL(true, NS_VCARD, "TEL");
@@ -297,13 +303,6 @@ const QName QN_VCARD_NUMBER(true, NS_VCARD, "NUMBER");
 #endif
 
 const QName QN_XML_LANG(true, NS_XML, "lang");
-
-const std::string STR_TYPE("type");
-const std::string STR_ID("id");
-const std::string STR_NAME("name");
-const std::string STR_JID("jid");
-const std::string STR_SUBSCRIPTION("subscription");
-const std::string STR_ASK("ask");
 
 const QName QN_ENCODING(true, STR_EMPTY, STR_ENCODING);
 const QName QN_VERSION(true, STR_EMPTY, STR_VERSION);
@@ -328,7 +327,6 @@ const QName QN_SOURCE(true, STR_EMPTY, "source");
 const QName QN_XMLNS_CLIENT(true, NS_XMLNS, STR_CLIENT);
 const QName QN_XMLNS_SERVER(true, NS_XMLNS, STR_SERVER);
 const QName QN_XMLNS_STREAM(true, NS_XMLNS, STR_STREAM);
-
 
 
 // Presence
@@ -379,11 +377,25 @@ const QName QN_DISCO_FEATURE(true, NS_DISCO_INFO, "feature");
 const QName QN_DISCO_ITEMS_QUERY(true, NS_DISCO_ITEMS, "query");
 const QName QN_DISCO_ITEM(true, NS_DISCO_ITEMS, "item");
 
+
+// JEP 0045
+const std::string NS_MUC("http://jabber.org/protocol/muc");
+const QName QN_MUC_X(true, NS_MUC, "x");
+const QName QN_MUC_ITEM(true, NS_MUC, "item");
+const QName QN_MUC_AFFILIATION(true, NS_MUC, "affiliation");
+const QName QN_MUC_ROLE(true, NS_MUC, "role");
+const std::string STR_AFFILIATION_NONE("none");
+const std::string STR_ROLE_PARTICIPANT("participant");
+
+const std::string NS_MUC_OWNER("http://jabber.org/protocol/muc#owner");
+const QName QN_MUC_OWNER_QUERY(true, NS_MUC_OWNER, "query");
+
 const std::string NS_MUC_USER("http://jabber.org/protocol/muc#user");
 const QName QN_MUC_USER_CONTINUE(true, NS_MUC_USER, "continue");
 const QName QN_MUC_USER_X(true, NS_MUC_USER, "x");
 const QName QN_MUC_USER_ITEM(true, NS_MUC_USER, "item");
 const QName QN_MUC_USER_STATUS(true, NS_MUC_USER, "status");
+
 
 // JEP 0115
 const std::string NS_CAPS("http://jabber.org/protocol/caps");
@@ -480,20 +492,6 @@ const QName QN_GOOGLE_MUC_USER_MEDIA(true, NS_GOOGLE_MUC_USER, "media");
 const QName QN_GOOGLE_MUC_USER_TYPE(true, NS_GOOGLE_MUC_USER, "type");
 const QName QN_GOOGLE_MUC_USER_SRC_ID(true, NS_GOOGLE_MUC_USER, "src-id");
 const QName QN_GOOGLE_MUC_USER_STATUS(true, NS_GOOGLE_MUC_USER, "status");
-const std::string NS_JINGLE("google:jingle");
-const QName QN_JINGLE_SRC_ID(true, NS_JINGLE, "src-id");
 const QName QN_LABEL(true, STR_EMPTY, "label");
-
-// Call terminate reasons
-const std::string STR_TERMINATE_CALL_ENDED("call-ended");
-const std::string STR_TERMINATE_RECIPIENT_UNAVAILABLE("recipient-unavailable");
-const std::string STR_TERMINATE_RECIPIENT_BUSY("recipient-busy");
-const std::string STR_TERMINATE_INSUFFICIENT_FUNDS("insufficient-funds");
-const std::string STR_TERMINATE_NUMBER_MALFORMED("number-malformed");
-const std::string STR_TERMINATE_NUMBER_DISALLOWED("number-disallowed");
-const std::string STR_TERMINATE_PROTOCOL_ERROR("protocol-error");
-const std::string STR_TERMINATE_INTERNAL_SERVER_ERROR("internal-server-error");
-const std::string STR_TERMINATE_UNKNOWN_ERROR("unknown-error");
-
 
 }  // namespace txmpp

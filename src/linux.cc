@@ -25,9 +25,8 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "linux.h"
-
 #ifdef LINUX
+#include "linux.h"
 
 #include <errno.h>
 #include <sys/utsname.h>
@@ -128,6 +127,17 @@ bool ProcCpuInfo::GetNumPhysicalCpus(int* num) {
   }
   return true;
 #endif
+}
+
+bool ProcCpuInfo::GetCpuFamily(int* id) {
+  int cpu_family = 0;
+
+  GetSectionIntValue(0, "cpu family", &cpu_family);
+
+  if (id) {
+    *id = cpu_family;
+  }
+  return true;
 }
 
 bool ProcCpuInfo::GetSectionStringValue(size_t section_num,

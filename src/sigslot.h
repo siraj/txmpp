@@ -82,8 +82,9 @@
 #include "config.h"
 #endif
 
-#include <set>
 #include <list>
+#include <set>
+#include <stdlib.h>
 
 // On our copy of sigslot.h, we force single threading
 #define SIGSLOT_PURE_ISO
