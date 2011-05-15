@@ -4,6 +4,7 @@
 *.o
 *.os
 *.so
+*.so.*
 .*.swp
 .scon*
 config.*
