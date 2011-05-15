@@ -115,6 +115,7 @@ extern const std::string STR_OUTGOINGVOICEMAIL;
 
 extern const std::string STR_UNAVAILABLE;
 
+extern const std::string STR_MUC_LOOKUP_DOMAIN;
 
 extern const QName QN_STREAM_STREAM;
 extern const QName QN_STREAM_FEATURES;
@@ -362,6 +363,15 @@ extern const QName QN_MUC_USER_CONTINUE;
 extern const QName QN_MUC_USER_X;
 extern const QName QN_MUC_USER_ITEM;
 extern const QName QN_MUC_USER_STATUS;
+
+
+// JEP 0055 - Jabber Search
+extern const std::string NS_SEARCH;
+extern const QName QN_SEARCH_QUERY;
+extern const QName QN_SEARCH_ITEM;
+extern const QName QN_SEARCH_ROOM_NAME;
+extern const QName QN_SEARCH_ROOM_JID;
+extern const QName QN_SEARCH_ORGANIZERS_DOMAIN;
 
 
 // JEP 0115
