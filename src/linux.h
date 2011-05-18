@@ -32,7 +32,7 @@
 #include "config.h"
 #endif
 
-#ifdef LINUX
+#if defined(LINUX) || defined(ANDROID)
 #include <string>
 #include <map>
 #include <vector>
@@ -137,5 +137,5 @@ int ReadCpuMaxFreq();
 
 }  // namespace txmpp
 
-#endif  // LINUX
+#endif  // defined(LINUX) || defined(ANDROID)
 #endif  // _TXMPP_LINUX_H_

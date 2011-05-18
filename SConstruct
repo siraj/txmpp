@@ -200,6 +200,7 @@ src = [
     'src/md5c.c',
     'src/messagehandler.cc',
     'src/messagequeue.cc',
+    'src/mucroomlookuptask.cc',
     'src/nethelpers.cc',
     'src/network.cc',
     'src/openssladapter.cc',
